@@ -17,7 +17,6 @@ with fits.open(file, memmap=True) as hdu:
     print(hdu.info())
 
     total_rows = hdu[0].data.shape[0]
-    pad = np.zeros((1000-(total_rows%1000),hdu[0].data.shape[0]))
 
     arrays=[]
     
@@ -27,7 +26,7 @@ with fits.open(file, memmap=True) as hdu:
         
         if (start_row+1000) > total_rows:
 
-            padded_array = np.append(hdu[0].data[start_row:total_rows, :], pad, axis=0)
+            padded_array = np.pad(hdu[0].data[start_row:total_rows, :], pad_width=((0,pad_width),(0,0)), mode='minimum')
 
             image_data = padded_array
             img_shaped = np.reshape(image_data, (100,10,192,100))
